@@ -1,0 +1,3 @@
+- register pour le token azure
+- faire le server
+- etudier une solution sans le server
