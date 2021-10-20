@@ -1,7 +1,13 @@
 import axios from 'axios';
 import Cookie from 'universal-cookie';
 
-export async function getTokenOrRefresh() {
+type TokenOrRefresh = {
+    authToken: null | string
+    region?: string,
+    error?: string
+}
+
+export async function getTokenOrRefresh(): Promise<TokenOrRefresh> {
     const cookie = new Cookie();
     const speechToken = cookie.get('speech-token');
 
