@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { getTokenOrRefresh } from './getTokenOrRefresh';
+import React, { useState, useEffect } from "react";
+import { getTokenOrRefresh } from "./getTokenOrRefresh";
 import './custom.css'
-import { ResultReason } from 'microsoft-cognitiveservices-speech-sdk';
-
-const speechsdk = require('microsoft-cognitiveservices-speech-sdk')
+import speechsdk from 'microsoft-cognitiveservices-speech-sdk';
 
 
 export default function App(): React.ReactElement {
-    const [displayText, setDisplayText] = useState('INITIALIZED: ready to test speech...");
+    const [displayText, setDisplayText] = useState("INITIALIZED: ready to test speech...");
 
     
     useEffect(() => {
         // check for valid speech key/region
-        const tokenRes = await getTokenOrRefresh();
-        if (tokenRes.authToken === null) {
-            setDisplayText('FATAL_ERROR: ' + tokenRes.error)
-        }
+        getTokenOrRefresh().then(tokenRes => {
+            if (tokenRes.authToken === null) {
+                setDisplayText('FATAL_ERROR: ' + tokenRes.error)
+            }
+        })
     }, []);
 
    const sttFromMic = async () => {
@@ -30,7 +29,7 @@ export default function App(): React.ReactElement {
 
         recognizer.recognizeOnceAsync(result => {
             let displayText;
-            if (result.reason === ResultReason.RecognizedSpeech) {
+            if (result.reason === speechsdk.ResultReason.RecognizedSpeech) {
                 displayText = `RECOGNIZED: Text=${result.text}`
             } else {
                 displayText = 'ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.';
@@ -55,7 +54,7 @@ export default function App(): React.ReactElement {
 
         recognizer.recognizeOnceAsync(result => {
             let displayText;
-            if (result.reason === ResultReason.RecognizedSpeech) {
+            if (result.reason === speechsdk.ResultReason.RecognizedSpeech) {
                 displayText = `RECOGNIZED: Text=${result.text}`
             } else {
                 displayText = 'ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.';
